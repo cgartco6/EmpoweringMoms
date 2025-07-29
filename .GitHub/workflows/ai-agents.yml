@@ -1,0 +1,46 @@
+name: AI Agents Automation
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # Run daily at 8am SAST
+  workflow_dispatch:
+
+jobs:
+  social-media:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        
+    - name: Run social media bot
+      env:
+        FACEBOOK_TOKEN: ${{ secrets.FACEBOOK_TOKEN }}
+        INSTAGRAM_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
+        TIKTOK_TOKEN: ${{ secrets.TIKTOK_TOKEN }}
+        DEEPAI_API_KEY: ${{ secrets.DEEPAI_API_KEY }}
+      run: |
+        pip install requests
+        python social-media-bot.py
+        
+  weekly-salary:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' && cron == '0 8 * * 5'  # Fridays at 8am
+    steps:
+    - name: Calculate salary
+      run: |
+        # Connect to database and calculate salary
+        SALARY=$(python -c "from payment_processor import generate_dashboard_data; print(generate_dashboard_data()['salary'])")
+        echo "salary=$SALARY" >> $GITHUB_ENV
+        
+    - name: Initiate bank transfer
+      env:
+        BANK_API_KEY: ${{ secrets.BANK_API_KEY }}
+      run: |
+        curl -X POST https://bankapi.example.com/transfer \
+          -H "Authorization: Bearer $BANK_API_KEY" \
+          -d '{"amount": "${{ env.salary }}", "account": "OWNER_ACC_NUM"}'
