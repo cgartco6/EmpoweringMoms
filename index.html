@@ -51,4 +51,868 @@
             background-color: white;
             box-shadow: var(--shadow);
             position: sticky;
-            top: 0
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo img {
+            height: 50px;
+        }
+        
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .logo-text span {
+            color: var(--secondary);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        nav a:hover {
+            color: var(--primary);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--primary);
+            transition: var(--transition);
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: var(--transition);
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            font-family: var(--font-heading);
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #4a148c;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(106, 27, 154, 0.2);
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #ff5252;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.2);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, rgba(106, 27, 154, 0.9) 0%, rgba(255, 107, 107, 0.85) 100%), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="white" fill-opacity="0.1"/></svg>');
+            background-size: cover;
+            background-position: center;
+            padding: 120px 0;
+            color: white;
+            text-align: center;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .hero p {
+            font-size: 1.4rem;
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        /* Features */
+        .features {
+            padding: 100px 0;
+            background-color: white;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-header h2 {
+            font-size: 2.8rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .section-header p {
+            font-size: 1.2rem;
+            color: var(--dark);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            text-align: center;
+            padding: 40px 25px;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(106, 27, 154, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 2rem;
+            color: var(--primary);
+        }
+        
+        .feature-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        /* Courses */
+        .courses {
+            padding: 100px 0;
+            background: linear-gradient(to bottom, #f9f7fe 0%, #ffffff 100%);
+        }
+        
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+        
+        .course-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .course-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .course-image {
+            height: 200px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .course-content {
+            padding: 30px;
+        }
+        
+        .course-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .course-price {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin: 15px 0;
+        }
+        
+        .course-features {
+            list-style: none;
+            margin: 25px 0;
+        }
+        
+        .course-features li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .course-features li i {
+            color: var(--success);
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            padding: 100px 0;
+            background: white;
+        }
+        
+        .testimonials-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .testimonial-card {
+            background: #f9f7fe;
+            border-radius: 15px;
+            padding: 40px;
+            margin: 0 20px;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .testimonial-card::before {
+            content: """;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 5rem;
+            color: rgba(106, 27, 154, 0.1);
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+        
+        .testimonial-text {
+            font-size: 1.2rem;
+            font-style: italic;
+            margin-bottom: 25px;
+            color: var(--dark);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .author-info h4 {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+        
+        .author-info p {
+            color: var(--dark);
+            opacity: 0.8;
+        }
+        
+        /* CTA */
+        .cta-section {
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .cta-section h2 {
+            font-size: 2.8rem;
+            margin-bottom: 25px;
+        }
+        
+        .cta-section p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 70px 0 30px;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--secondary);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 15px;
+        }
+        
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary);
+            transform: translateX(5px);
+        }
+        
+        .contact-info {
+            list-style: none;
+        }
+        
+        .contact-info li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+        
+        .social-links a:hover {
+            background: var(--secondary);
+            transform: translateY(-5px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            nav ul {
+                gap: 15px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .hero h1 {
+                font-size: 2.3rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .section-header h2 {
+                font-size: 2.2rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .auth-buttons {
+                flex-direction: column;
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-hands-helping" style="font-size: 2rem; color: var(--primary);"></i>
+                </div>
+                <div class="logo-text">Empowering<span>Moms</span></div>
+            </div>
+            
+            <nav>
+                <ul>
+                    <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#courses"><i class="fas fa-book"></i> Courses</a></li>
+                    <li><a href="#features"><i class="fas fa-star"></i> Benefits</a></li>
+                    <li><a href="#testimonials"><i class="fas fa-comments"></i> Success Stories</a></li>
+                    <li><a href="#"><i class="fas fa-headset"></i> Support</a></li>
+                </ul>
+            </nav>
+            
+            <div class="auth-buttons">
+                <a href="#" class="btn btn-outline"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a href="#courses" class="btn btn-primary"><i class="fas fa-user-plus"></i> Get Started</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-content">
+            <h1>Financial Freedom for South African Moms</h1>
+            <p>Transform your life with our proven online courses designed specifically for moms. Learn marketable skills, boost your income, and achieve financial independence - all from home.</p>
+            <div class="hero-buttons">
+                <a href="#courses" class="btn btn-secondary"><i class="fas fa-play-circle"></i> Explore Courses</a>
+                <a href="#features" class="btn btn-outline"><i class="fas fa-video"></i> How It Works</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features/Benefits -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why Moms Choose Our Platform</h2>
+                <p>Our AI-powered platform provides everything you need to succeed in your financial journey</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>AI-Powered Learning</h3>
+                    <p>Personalized course recommendations and adaptive learning paths tailored to your goals and schedule.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Military-Grade Security</h3>
+                    <p>Bank-level encryption protects your data and payments. Your financial safety is our top priority.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Mobile-First Design</h3>
+                    <p>Learn anytime, anywhere. Our platform works perfectly on all devices, even with slow internet.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>24/7 AI Support</h3>
+                    <p>Get instant answers to your questions anytime with our AI-powered support assistant.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Income Tracking</h3>
+                    <p>Monitor your progress and see your income grow with our built-in financial dashboard.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Mom Community</h3>
+                    <p>Connect with other ambitious South African moms for support, networking, and collaboration.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses -->
+    <section class="courses" id="courses">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Transformative Courses</h2>
+                <p>Expert-designed courses to help you build sustainable income from home</p>
+            </div>
+            
+            <div class="courses-grid">
+                <div class="course-card">
+                    <div class="course-image" style="background: linear-gradient(45deg, #3f51b5, #2196f3);">
+                        Facebook Blueprint
+                    </div>
+                    <div class="course-content">
+                        <h3>Facebook Marketing Mastery</h3>
+                        <p>Learn to leverage Facebook for business growth and income generation</p>
+                        
+                        <div class="course-price">R500</div>
+                        
+                        <ul class="course-features">
+                            <li><i class="fas fa-check-circle"></i> 8 Comprehensive Modules</li>
+                            <li><i class="fas fa-check-circle"></i> 30+ Video Lessons</li>
+                            <li><i class="fas fa-check-circle"></i> Downloadable Resources</li>
+                            <li><i class="fas fa-check-circle"></i> Certification Included</li>
+                            <li><i class="fas fa-check-circle"></i> Lifetime Access</li>
+                        </ul>
+                        
+                        <a href="#" class="btn btn-primary btn-block"><i class="fas fa-shopping-cart"></i> Enroll Now</a>
+                    </div>
+                </div>
+                
+                <div class="course-card">
+                    <div class="course-image" style="background: linear-gradient(45deg, #e91e63, #ff4081);">
+                        Academy Six
+                    </div>
+                    <div class="course-content">
+                        <h3>Advanced Digital Marketing</h3>
+                        <p>Master the complete digital marketing funnel for maximum income</p>
+                        
+                        <div class="course-price">R1,800</div>
+                        
+                        <ul class="course-features">
+                            <li><i class="fas fa-check-circle"></i> 12 Advanced Modules</li>
+                            <li><i class="fas fa-check-circle"></i> 50+ Video Lessons</li>
+                            <li><i class="fas fa-check-circle"></i> Real Client Projects</li>
+                            <li><i class="fas fa-check-circle"></i> Portfolio Building</li>
+                            <li><i class="fas fa-check-circle"></i> Job Placement Assistance</li>
+                        </ul>
+                        
+                        <a href="#" class="btn btn-primary btn-block"><i class="fas fa-shopping-cart"></i> Enroll Now</a>
+                    </div>
+                </div>
+                
+                <div class="course-card">
+                    <div class="course-image" style="background: linear-gradient(45deg, #4caf50, #8bc34a);">
+                        Little Learners
+                    </div>
+                    <div class="course-content">
+                        <h3>Early Childhood Education</h3>
+                        <p>Start an educational service for children while earning from home</p>
+                        
+                        <div class="course-price">R250</div>
+                        
+                        <ul class="course-features">
+                            <li><i class="fas fa-check-circle"></i> 6 Practical Modules</li>
+                            <li><i class="fas fa-check-circle"></i> Activity Templates</li>
+                            <li><i class="fas fa-check-circle"></i> Marketing Materials</li>
+                            <li><i class="fas fa-check-circle"></i> Pricing Strategies</li>
+                            <li><i class="fas fa-check-circle"></i> Legal Guidance</li>
+                        </ul>
+                        
+                        <a href="#" class="btn btn-primary btn-block"><i class="fas fa-shopping-cart"></i> Enroll Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2>Success Stories from SA Moms</h2>
+                <p>Hear from moms just like you who transformed their lives with our courses</p>
+            </div>
+            
+            <div class="testimonials-container">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"After completing the Facebook Blueprint course, I started my own social media management business. In just 4 months, I'm earning R15,000/month while still being present for my kids. This course changed our lives!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">TN</div>
+                        <div class="author-info">
+                            <h4>Thandiwe Nkosi</h4>
+                            <p>Johannesburg, Single Mom of Two</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card" style="margin-top: 40px;">
+                    <p class="testimonial-text">"The Academy Six course gave me the skills and confidence to leave my corporate job. I now run a successful digital marketing agency from home and earn 3x what I made before. Best investment ever!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SL</div>
+                        <div class="author-info">
+                            <h4>Sarah Leboho</h4>
+                            <p>Cape Town, Mom of Three</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Transform Your Financial Future?</h2>
+            <p>Join thousands of South African moms who are building sustainable income streams from home</p>
+            <a href="#courses" class="btn btn-outline"><i class="fas fa-rocket"></i> Start Your Journey Today</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>Empowering Moms</h3>
+                    <p>We're dedicated to helping South African mothers achieve financial independence through accessible, high-quality online education.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Home</a></li>
+                        <li><a href="#courses"><i class="fas fa-chevron-right"></i> Courses</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Success Stories</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Blog</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Courses</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Facebook Blueprint</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Academy Six</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Little Learners</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Financial Literacy</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Coming Soon</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-map-marker-alt"></i> Cape Town, South Africa</li>
+                        <li><i class="fas fa-phone"></i> +27 21 123 4567</li>
+                        <li><i class="fas fa-envelope"></i> support@empoweringmoms.co.za</li>
+                        <li><i class="fas fa-clock"></i> AI Support: 24/7</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Empowering Moms. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+                <p>Military-grade security powered by AI protection systems</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Animation on scroll
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+        
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.feature-card, .course-card, .testimonial-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            
+            observer.observe(card);
+            
+            card.classList.add('animated');
+        });
+        
+        // Handle the animation when element comes into view
+        document.addEventListener('DOMContentLoaded', function() {
+            const animatedElements = document.querySelectorAll('.feature-card, .course-card, .testimonial-card');
+            
+            animatedElements.forEach(el => {
+                if (el.getBoundingClientRect().top < window.innerHeight - 100) {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }
+            });
+        });
+        
+        window.addEventListener('scroll', function() {
+            const animatedElements = document.querySelectorAll('.feature-card:not(.animated), .course-card:not(.animated), .testimonial-card:not(.animated)');
+            
+            animatedElements.forEach(el => {
+                if (el.getBoundingClientRect().top < window.innerHeight - 100) {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                    el.classList.add('animated');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
