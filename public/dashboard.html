@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empowering Moms | Business Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #6a1b9a;
+            --secondary: #ff6b6b;
+            --accent: #ffd54f;
+            --dark: #2c3e50;
+            --light: #f8f9fa;
+            --success: #4caf50;
+            --danger: #e53935;
+            --info: #29b6f6;
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --font-heading: 'Montserrat', sans-serif;
+            --sidebar-width: 260px;
+            --header-height: 70px;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-main);
+            background-color: #f5f7fb;
+            color: var(--dark);
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--dark);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            transition: var(--transition);
+            z-index: 1000;
+        }
+        
+        .sidebar-header {
+            padding: 25px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .sidebar-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .user-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .user-info p {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+        
+        .menu-item {
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+            transition: var(--transition);
+            border-left: 4px solid transparent;
+        }
+        
+        .menu-item:hover, .menu-item.active {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .menu-item i {
+            width: 24px;
+            text-align: center;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            transition: var(--transition);
+        }
+        
+        /* Header */
+        .header {
+            height: var(--header-height);
+            background: white;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-left h1 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .action-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--light);
+            color: var(--dark);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .action-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .date-display {
+            background: var(--light);
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        /* Dashboard Content */
+        .dashboard-content {
+            padding: 30px;
+        }
+        
+        /* Summary Cards */
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .summary-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: var(--transition);
+        }
+        
+        .summary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .card-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+        
+        .card-1 .card-icon { background: rgba(106, 27, 154, 0.1); color: var(--primary); }
+        .card-2 .card-icon { background: rgba(255, 107, 107, 0.1); color: var(--secondary); }
+        .card-3 .card-icon { background: rgba(255, 213, 79, 0.1); color: var(--accent); }
+        .card-4 .card-icon { background: rgba(41, 182, 246, 0.1); color: var(--info); }
+        
+        .card-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+        
+        .card-content p {
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        /* Charts Section */
+        .charts-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .chart-header h2 {
+            font-size: 1.3rem;
+            color: var(--dark);
+        }
+        
+        .chart-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chart-btn {
+            padding: 6px 15px;
+            border-radius: 50px;
+            background: var(--light);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+        
+        .chart-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .chart-wrapper {
+            height: 300px;
+            position: relative;
+        }
+        
+        /* Tables Section */
+        .tables-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .table-header h2 {
+            font-size: 1.3rem;
+            color: var(--dark);
+        }
+        
+        .table-wrapper {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            color: #777;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        tbody tr:hover {
+            background: #f9f9f9;
+        }
+        
+        .status {
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status.completed {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--success);
+        }
+        
+        .status.pending {
+            background: rgba(255, 213, 79, 0.1);
+            color: var(--accent);
+        }
+        
+        .status.failed {
+            background: rgba(229, 57, 53, 0.1);
+            color: var(--danger);
+        }
+        
+        /* Map Section */
+        .map-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+        
+        .map-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .map-header h2 {
+            font-size: 1.3rem;
+            color: var(--dark);
+        }
+        
+        .map-wrapper {
+            height: 300px;
+            background: #e9ecef;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .map-overlay {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .map-overlay h3 {
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+        
+        .province-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .province-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .province-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        /* Footer */
+        .footer {
+            padding: 20px 30px;
+            text-align: center;
+            color: #777;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .charts-row, .tables-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .header-left h1 {
+                font-size: 1.3rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .summary-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                padding: 0 15px;
+            }
+            
+            .dashboard-content {
+                padding: 20px 15px;
+            }
+            
+            .date-display {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E" alt="User">
+            <div class="user-info">
+                <h3>Sarah Johnson</h3>
+                <p>Owner, Empowering Moms</p>
+            </div>
+        </div>
+        
+        <div class="sidebar-menu">
+            <a href="#" class="menu-item active">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-wallet"></i>
+                <span>Revenue</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-users"></i>
+                <span>Customers</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-book"></i>
+                <span>Courses</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-bullhorn"></i>
+                <span>Marketing</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-cogs"></i>
+                <span>Settings</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-user-shield"></i>
+                <span>Security</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <span>Salary</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <h1><i class="fas fa-chart-line"></i> Business Dashboard</h1>
+            </div>
+            <div class="header-right">
+                <div class="date-display">
+                    <i class="fas fa-calendar-alt"></i> July 29, 2025
+                </div>
+                <div class="header-actions">
+                    <div class="action-btn">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="action-btn">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <div class="action-btn" id="menuToggle">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dashboard Content -->
+        <div class="dashboard-content">
+            <!-- Summary Cards -->
+            <div class="summary-cards">
+                <div class="summary-card card-1">
+                    <div class="card-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>R42,580</h3>
+                        <p>Total Revenue</p>
+                    </div>
+                </div>
+                
+                <div class="summary-card card-2">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>R8,650</h3>
+                        <p>Weekly Salary</p>
+                    </div>
+                </div>
+                
+                <div class="summary-card card-3">
+                    <div class="card-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>186</h3>
+                        <p>Total Transactions</p>
+                    </div>
+                </div>
+                
+                <div class="summary-card card-4">
+                    <div class="card-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>142</h3>
+                        <p>Active Students</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Charts Row -->
+            <div class="charts-row">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h2><i class="fas fa-chart-area"></i> Revenue Overview</h2>
+                        <div class="chart-actions">
+                            <button class="chart-btn active">Weekly</button>
+                            <button class="chart-btn">Monthly</button>
+                            <button class="chart-btn">Quarterly</button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h2><i class="fas fa-chart-pie"></i> Revenue by Platform</h2>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="platformChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tables Row -->
+            <div class="tables-row">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h2><i class="fas fa-map-marker-alt"></i> Revenue by Province</h2>
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Province</th>
+                                    <th>Revenue</th>
+                                    <th>Students</th>
+                                    <th>Growth</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Gauteng</td>
+                                    <td>R15,820</td>
+                                    <td>56</td>
+                                    <td><span style="color: var(--success);">↑ 12.5%</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Western Cape</td>
+                                    <td>R11,450</td>
+                                    <td>42</td>
+                                    <td><span style="color: var(--success);">↑ 8.3%</span></td>
+                                </tr>
+                                <tr>
+                                    <td>KwaZulu-Natal</td>
+                                    <td>R7,860</td>
+                                    <td>28</td>
+                                    <td><span style="color: var(--success);">↑ 5.6%</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Eastern Cape</td>
+                                    <td>R3,250</td>
+                                    <td>12</td>
+                                    <td><span style="color: var(--danger);">↓ 2.1%</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Free State</td>
+                                    <td>R2,120</td>
+                                    <td>8</td>
+                                    <td><span style="color: var(--success);">↑ 3.4%</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <div class="table-header">
+                        <h2><i class="fas fa-book"></i> Revenue by Course</h2>
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Course</th>
+                                    <th>Revenue</th>
+                                    <th>Students</th>
+                                    <th>Avg. Rating</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Academy Six</td>
+                                    <td>R25,200</td>
+                                    <td>14</td>
+                                    <td>4.9 <i class="fas fa-star" style="color: var(--accent);"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>Facebook Blueprint</td>
+                                    <td>R12,500</td>
+                                    <td>25</td>
+                                    <td>4.7 <i class="fas fa-star" style="color: var(--accent);"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>Little Learners</td>
+                                    <td>R4,880</td>
+                                    <td>19</td>
+                                    <td>4.8 <i class="fas fa-star" style="color: var(--accent);"></i></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Map Section -->
+            <div class="map-container">
+                <div class="map-header">
+                    <h2><i class="fas fa-map"></i> Revenue by Location</h2>
+                </div>
+                <div class="map-wrapper">
+                    <div class="map-overlay">
+                        <h3>South Africa Revenue Distribution</h3>
+                        <p>Hover over provinces for details</p>
+                    </div>
+                    <canvas id="mapCanvas"></canvas>
+                </div>
+                <div class="province-list">
+                    <div class="province-item">
+                        <div class="province-color" style="background: #6a1b9a;"></div>
+                        <span>Gauteng (R15,820)</span>
+                    </div>
+                    <div class="province-item">
+                        <div class="province-color" style="background: #ff6b6b;"></div>
+                        <span>Western Cape (R11,450)</span>
+                    </div>
+                    <div class="province-item">
+                        <div class="province-color" style="background: #ffd54f;"></div>
+                        <span>KwaZulu-Natal (R7,860)</span>
+                    </div>
+                    <div class="province-item">
+                        <div class="province-color" style="background: #29b6f6;"></div>
+                        <span>Eastern Cape (R3,250)</span>
+                    </div>
+                    <div class="province-item">
+                        <div class="province-color" style="background: #4caf50;"></div>
+                        <span>Free State (R2,120)</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Transactions -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h2><i class="fas fa-receipt"></i> Recent Transactions</h2>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Customer</th>
+                                <th>Course</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#EM-4821</td>
+                                <td>Thandiwe Nkosi</td>
+                                <td>Academy Six</td>
+                                <td>Jul 28, 2025</td>
+                                <td>R1,800</td>
+                                <td><span class="status completed">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>#EM-4820</td>
+                                <td>Sarah Leboho</td>
+                                <td>Facebook Blueprint</td>
+                                <td>Jul 28, 2025</td>
+                                <td>R500</td>
+                                <td><span class="status completed">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>#EM-4819</td>
+                                <td>Amanda Mbeki</td>
+                                <td>Little Learners</td>
+                                <td>Jul 27, 2025</td>
+                                <td>R250</td>
+                                <td><span class="status completed">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>#EM-4818</td>
+                                <td>Nomvula Khumalo</td>
+                                <td>Academy Six</td>
+                                <td>Jul 27, 2025</td>
+                                <td>R1,800</td>
+                                <td><span class="status pending">Pending</span></td>
+                            </tr>
+                            <tr>
+                                <td>#EM-4817</td>
+                                <td>Lerato Moloi</td>
+                                <td>Facebook Blueprint</td>
+                                <td>Jul 26, 2025</td>
+                                <td>R500</td>
+                                <td><span class="status completed">Completed</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Footer -->
+            <div class="footer">
+                <p>Empowering Moms Business Dashboard • AI-Powered Analytics • Military-Grade Security</p>
+                <p>Data updated in real-time • Next salary payout: August 1, 2025</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle sidebar on mobile
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+        
+        // Revenue Chart
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        const revenueChart = new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jun 30', 'Jul 7', 'Jul 14', 'Jul 21', 'Jul 28'],
+                datasets: [{
+                    label: 'Weekly Revenue (R)',
+                    data: [8200, 10500, 9800, 12400, 15600],
+                    borderColor: '#6a1b9a',
+                    backgroundColor: 'rgba(106, 27, 154, 0.1)',
+                    borderWidth: 3,
+                    pointBackgroundColor: '#fff',
+                    pointBorderWidth: 3,
+                    pointRadius: 6,
+                    tension: 0.3,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(44, 62, 80, 0.9)',
+                        padding: 12,
+                        titleFont: {
+                            size: 14
+                        },
+                        bodyFont: {
+                            size: 14
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            drawBorder: false
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return 'R' + value.toLocaleString();
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Platform Chart
+        const platformCtx = document.getElementById('platformChart').getContext('2d');
+        const platformChart = new Chart(platformCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Facebook', 'Instagram', 'TikTok', 'Google Ads', 'Referrals'],
+                datasets: [{
+                    data: [35, 25, 20, 15, 5],
+                    backgroundColor: [
+                        '#6a1b9a',
+                        '#ff6b6b',
+                        '#ffd54f',
+                        '#29b6f6',
+                        '#4caf50'
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: 15
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '70%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            font: {
+                                size: 12
+                            },
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.parsed + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Simple map visualization
+        const mapCanvas = document.getElementById('mapCanvas');
+        const mapCtx = mapCanvas.getContext('2d');
+        
+        function drawMap() {
+            mapCanvas.width = mapCanvas.parentElement.clientWidth;
+            mapCanvas.height = mapCanvas.parentElement.clientHeight;
+            
+            // Draw a simple representation of South Africa
+            mapCtx.clearRect(0, 0, mapCanvas.width, mapCanvas.height);
+            
+            // Draw provinces with different colors
+            const provinces = [
+                {name: 'Gauteng', color: '#6a1b9a', x: 250, y: 150, width: 80, height: 80},
+                {name: 'Western Cape', color: '#ff6b6b', x: 150, y: 250, width: 70, height: 100},
+                {name: 'KwaZulu-Natal', color: '#ffd54f', x: 300, y: 200, width: 90, height: 90},
+                {name: 'Eastern Cape', color: '#29b6f6', x: 200, y: 230, width: 60, height: 90},
+                {name: 'Free State', color: '#4caf50', x: 220, y: 170, width: 70, height: 60}
+            ];
+            
+            provinces.forEach(province => {
+                mapCtx.fillStyle = province.color;
+                mapCtx.fillRect(province.x, province.y, province.width, province.height);
+                mapCtx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+                mapCtx.lineWidth = 2;
+                mapCtx.strokeRect(province.x, province.y, province.width, province.height);
+                
+                // Province label
+                mapCtx.fillStyle = 'white';
+                mapCtx.font = 'bold 12px Arial';
+                mapCtx.textAlign = 'center';
+                mapCtx.fillText(province.name, province.x + province.width/2, province.y + province.height/2);
+            });
+        }
+        
+        // Initialize and redraw on resize
+        drawMap();
+        window.addEventListener('resize', drawMap);
+        
+        // Update date display
+        function updateDate() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.querySelector('.date-display').innerHTML = `<i class="fas fa-calendar-alt"></i> ${now.toLocaleDateString('en-US', options)}`;
+        }
+        
+        updateDate();
+    </script>
+</body>
+</html>
