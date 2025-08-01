@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Empowering Moms | Financial Freedom for South African Mothers</title>
+    <title>Empowering Moms - Financial Freedom for South African Mothers</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary: #6a1b9a;
@@ -13,10 +14,17 @@
             --dark: #2c3e50;
             --light: #f8f9fa;
             --success: #4caf50;
+            --danger: #e53935;
+            --info: #29b6f6;
             --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             --font-heading: 'Montserrat', sans-serif;
             --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             --transition: all 0.3s ease;
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            --radius-full: 50px;
         }
         
         * {
@@ -68,8 +76,16 @@
             gap: 10px;
         }
         
-        .logo img {
+        .logo-icon {
+            background: var(--primary);
+            color: white;
+            width: 50px;
             height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
         }
         
         .logo-text {
@@ -123,7 +139,7 @@
         
         .btn {
             padding: 12px 25px;
-            border-radius: 50px;
+            border-radius: var(--radius-full);
             font-weight: 600;
             text-decoration: none;
             display: inline-block;
@@ -169,7 +185,7 @@
         
         /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, rgba(106, 27, 154, 0.9) 0%, rgba(255, 107, 107, 0.85) 100%), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="white" fill-opacity="0.1"/></svg>');
+            background: linear-gradient(135deg, rgba(106, 27, 154, 0.9) 0%, rgba(255, 107, 107, 0.85) 100%), url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');
             background-size: cover;
             background-position: center;
             padding: 120px 0;
@@ -294,13 +310,15 @@
         
         .course-image {
             height: 200px;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            background-size: cover;
+            background-position: center;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-size: 2rem;
             font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
         
         .course-content {
@@ -522,6 +540,183 @@
             color: #aaa;
         }
         
+        /* Dashboard */
+        .dashboard-section {
+            padding: 50px 0;
+            min-height: 100vh;
+            background: #f5f7fb;
+        }
+        
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .dashboard-header h1 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .dashboard-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .card-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            background: rgba(106, 27, 154, 0.1);
+            color: var(--primary);
+        }
+        
+        .card-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+        
+        .chart-header {
+            margin-bottom: 20px;
+        }
+        
+        .chart-wrapper {
+            height: 300px;
+            position: relative;
+        }
+        
+        .ai-agents-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+        
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .agent-card {
+            background: #f9f7fe;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .agent-card h4 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .agent-status {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--success);
+            margin-left: auto;
+        }
+        
+        /* Payment Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 15px;
+            padding: 30px;
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .payment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .payment-form input, .payment-form select {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .payment-methods {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .payment-method {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .payment-method.active {
+            border-color: var(--primary);
+            background: rgba(106, 27, 154, 0.05);
+        }
+        
         /* Responsive */
         @media (max-width: 992px) {
             .hero h1 {
@@ -579,20 +774,19 @@
     <!-- Header -->
     <header>
         <div class="container header-container">
-            <div class="logo">
+            <a href="#" class="logo">
                 <div class="logo-icon">
-                    <i class="fas fa-hands-helping" style="font-size: 2rem; color: var(--primary);"></i>
+                    <i class="fas fa-hands-helping"></i>
                 </div>
                 <div class="logo-text">Empowering<span>Moms</span></div>
-            </div>
+            </a>
             
             <nav>
                 <ul>
-                    <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#" class="active"><i class="fas fa-home"></i> Home</a></li>
                     <li><a href="#courses"><i class="fas fa-book"></i> Courses</a></li>
-                    <li><a href="#features"><i class="fas fa-star"></i> Benefits</a></li>
                     <li><a href="#testimonials"><i class="fas fa-comments"></i> Success Stories</a></li>
-                    <li><a href="#"><i class="fas fa-headset"></i> Support</a></li>
+                    <li><a href="#dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                 </ul>
             </nav>
             
@@ -685,7 +879,7 @@
             
             <div class="courses-grid">
                 <div class="course-card">
-                    <div class="course-image" style="background: linear-gradient(45deg, #3f51b5, #2196f3);">
+                    <div class="course-image" style="background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');">
                         Facebook Blueprint
                     </div>
                     <div class="course-content">
@@ -702,12 +896,14 @@
                             <li><i class="fas fa-check-circle"></i> Lifetime Access</li>
                         </ul>
                         
-                        <a href="#" class="btn btn-primary btn-block"><i class="fas fa-shopping-cart"></i> Enroll Now</a>
+                        <button class="btn btn-primary btn-block enroll-btn" data-course="facebook" data-price="500">
+                            <i class="fas fa-shopping-cart"></i> Enroll Now
+                        </button>
                     </div>
                 </div>
                 
                 <div class="course-card">
-                    <div class="course-image" style="background: linear-gradient(45deg, #e91e63, #ff4081);">
+                    <div class="course-image" style="background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');">
                         Academy Six
                     </div>
                     <div class="course-content">
@@ -724,12 +920,14 @@
                             <li><i class="fas fa-check-circle"></i> Job Placement Assistance</li>
                         </ul>
                         
-                        <a href="#" class="btn btn-primary btn-block"><i class="fas fa-shopping-cart"></i> Enroll Now</a>
+                        <button class="btn btn-primary btn-block enroll-btn" data-course="academy" data-price="1800">
+                            <i class="fas fa-shopping-cart"></i> Enroll Now
+                        </button>
                     </div>
                 </div>
                 
                 <div class="course-card">
-                    <div class="course-image" style="background: linear-gradient(45deg, #4caf50, #8bc34a);">
+                    <div class="course-image" style="background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');">
                         Little Learners
                     </div>
                     <div class="course-content">
@@ -746,7 +944,9 @@
                             <li><i class="fas fa-check-circle"></i> Legal Guidance</li>
                         </ul>
                         
-                        <a href="#" class="btn btn-primary btn-block"><i class="fas fa-shopping-cart"></i> Enroll Now</a>
+                        <button class="btn btn-primary btn-block enroll-btn" data-course="learners" data-price="250">
+                            <i class="fas fa-shopping-cart"></i> Enroll Now
+                        </button>
                     </div>
                 </div>
             </div>
@@ -763,23 +963,23 @@
             
             <div class="testimonials-container">
                 <div class="testimonial-card">
-                    <p class="testimonial-text">"After completing the Facebook Blueprint course, I started my own social media management business. In just 4 months, I'm earning R15,000/month while still being present for my kids. This course changed our lives!"</p>
+                    <p class="testimonial-text">"After completing the Facebook Marketing course, I started my own social media business. I'm now earning R12,000/month while still being home with my kids."</p>
                     <div class="testimonial-author">
                         <div class="author-avatar">TN</div>
                         <div class="author-info">
                             <h4>Thandiwe Nkosi</h4>
-                            <p>Johannesburg, Single Mom of Two</p>
+                            <p>Johannesburg, Single Mom</p>
                         </div>
                     </div>
                 </div>
                 
                 <div class="testimonial-card" style="margin-top: 40px;">
-                    <p class="testimonial-text">"The Academy Six course gave me the skills and confidence to leave my corporate job. I now run a successful digital marketing agency from home and earn 3x what I made before. Best investment ever!"</p>
+                    <p class="testimonial-text">"The Digital Marketing Academy helped me double my income in just 3 months. The step-by-step guidance was exactly what I needed to start my freelance career."</p>
                     <div class="testimonial-author">
                         <div class="author-avatar">SL</div>
                         <div class="author-info">
                             <h4>Sarah Leboho</h4>
-                            <p>Cape Town, Mom of Three</p>
+                            <p>Cape Town, Mom of Two</p>
                         </div>
                     </div>
                 </div>
@@ -793,6 +993,131 @@
             <h2>Ready to Transform Your Financial Future?</h2>
             <p>Join thousands of South African moms who are building sustainable income streams from home</p>
             <a href="#courses" class="btn btn-outline"><i class="fas fa-rocket"></i> Start Your Journey Today</a>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section class="dashboard-section" id="dashboard">
+        <div class="dashboard-container">
+            <div class="dashboard-header">
+                <h1><i class="fas fa-chart-line"></i> Business Dashboard</h1>
+                <p>AI-Powered Analytics & Reports for Business Owner</p>
+            </div>
+            
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="card-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>R42,580</h3>
+                        <p>Total Revenue</p>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="card-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>R8,650</h3>
+                        <p>Weekly Salary</p>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="card-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>186</h3>
+                        <p>Total Transactions</p>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="card-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>142</h3>
+                        <p>Active Students</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h2><i class="fas fa-chart-bar"></i> Revenue by Province</h2>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="provinceChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h2><i class="fas fa-chart-pie"></i> Revenue by Marketing Platform</h2>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="platformChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="ai-agents-section">
+                <h2><i class="fas fa-robot"></i> AI Agents Status</h2>
+                <p>Our automated AI agents are working 24/7 to manage your business</p>
+                
+                <div class="agents-grid">
+                    <div class="agent-card">
+                        <h4>
+                            <i class="fas fa-tools"></i> Maintenance Agent
+                            <span class="agent-status"></span>
+                        </h4>
+                        <p>Ensures website is always running smoothly and fixes issues automatically</p>
+                    </div>
+                    
+                    <div class="agent-card">
+                        <h4>
+                            <i class="fas fa-bullhorn"></i> Marketing Agent
+                            <span class="agent-status"></span>
+                        </h4>
+                        <p>Creates and posts content on social media to attract new students</p>
+                    </div>
+                    
+                    <div class="agent-card">
+                        <h4>
+                            <i class="fas fa-headset"></i> Support Agent
+                            <span class="agent-status"></span>
+                        </h4>
+                        <p>Handles customer inquiries 24/7 with AI-powered responses</p>
+                    </div>
+                    
+                    <div class="agent-card">
+                        <h4>
+                            <i class="fas fa-credit-card"></i> Payment Agent
+                            <span class="agent-status"></span>
+                        </h4>
+                        <p>Manages all transactions with military-grade security</p>
+                    </div>
+                    
+                    <div class="agent-card">
+                        <h4>
+                            <i class="fas fa-file-alt"></i> Content Agent
+                            <span class="agent-status"></span>
+                        </h4>
+                        <p>Creates new course materials and marketing content</p>
+                    </div>
+                    
+                    <div class="agent-card">
+                        <h4>
+                            <i class="fas fa-money-check-alt"></i> Salary Agent
+                            <span class="agent-status"></span>
+                        </h4>
+                        <p>Automatically pays your salary every Friday</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -817,8 +1142,7 @@
                     <ul class="footer-links">
                         <li><a href="#"><i class="fas fa-chevron-right"></i> Home</a></li>
                         <li><a href="#courses"><i class="fas fa-chevron-right"></i> Courses</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> About Us</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Success Stories</a></li>
+                        <li><a href="#testimonials"><i class="fas fa-chevron-right"></i> Success Stories</a></li>
                         <li><a href="#"><i class="fas fa-chevron-right"></i> Blog</a></li>
                     </ul>
                 </div>
@@ -830,7 +1154,6 @@
                         <li><a href="#"><i class="fas fa-chevron-right"></i> Academy Six</a></li>
                         <li><a href="#"><i class="fas fa-chevron-right"></i> Little Learners</a></li>
                         <li><a href="#"><i class="fas fa-chevron-right"></i> Financial Literacy</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Coming Soon</a></li>
                     </ul>
                 </div>
                 
@@ -851,9 +1174,251 @@
             </div>
         </div>
     </footer>
-    
+
+    <!-- Payment Modal -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2><i class="fas fa-lock"></i> Secure Payment</h2>
+            <p>Complete your enrollment with our military-grade secure payment system</p>
+            
+            <div class="payment-methods">
+                <div class="payment-method active" data-method="card">
+                    <i class="fas fa-credit-card fa-2x"></i>
+                    <p>Credit Card</p>
+                </div>
+                <div class="payment-method" data-method="payfast">
+                    <i class="fas fa-university fa-2x"></i>
+                    <p>PayFast</p>
+                </div>
+                <div class="payment-method" data-method="eft">
+                    <i class="fas fa-exchange-alt fa-2x"></i>
+                    <p>EFT</p>
+                </div>
+            </div>
+            
+            <form class="payment-form">
+                <input type="hidden" id="courseName">
+                <input type="hidden" id="coursePrice">
+                
+                <div id="cardDetails">
+                    <input type="text" placeholder="Cardholder Name" required>
+                    <input type="text" placeholder="Card Number" required>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <input type="text" placeholder="Expiry Date (MM/YY)" required>
+                        <input type="text" placeholder="CVV" required>
+                    </div>
+                </div>
+                
+                <div id="bankDetails" style="display: none;">
+                    <p>Bank: First National Bank</p>
+                    <p>Account: 62758963254</p>
+                    <p>Branch: 250655</p>
+                    <p>Reference: EM-<span id="referenceNumber"></span></p>
+                </div>
+                
+                <div id="payfastDetails" style="display: none;">
+                    <p>You'll be redirected to PayFast to complete your payment</p>
+                    <p>PayFast is South Africa's leading payment gateway</p>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-lock"></i> Pay R<span id="paymentAmount">0</span>
+                </button>
+                
+                <p style="font-size: 0.8rem; text-align: center; margin-top: 15px;">
+                    <i class="fas fa-shield-alt"></i> All transactions are encrypted with military-grade security
+                </p>
+            </form>
+        </div>
+    </div>
+
     <script>
-        // Smooth scrolling for navigation links
+        // Charts
+        const provinceCtx = document.getElementById('provinceChart').getContext('2d');
+        const provinceChart = new Chart(provinceCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Gauteng', 'Western Cape', 'KwaZulu-Natal', 'Eastern Cape', 'Free State'],
+                datasets: [{
+                    label: 'Revenue (R)',
+                    data: [15820, 11450, 7860, 3250, 2120],
+                    backgroundColor: [
+                        '#6a1b9a',
+                        '#ff6b6b',
+                        '#ffd54f',
+                        '#29b6f6',
+                        '#4caf50'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            drawBorder: false
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return 'R' + value.toLocaleString();
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+        
+        const platformCtx = document.getElementById('platformChart').getContext('2d');
+        const platformChart = new Chart(platformCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Facebook', 'Instagram', 'TikTok', 'Google Ads', 'Referrals'],
+                datasets: [{
+                    data: [35, 25, 20, 15, 5],
+                    backgroundColor: [
+                        '#6a1b9a',
+                        '#ff6b6b',
+                        '#ffd54f',
+                        '#29b6f6',
+                        '#4caf50'
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: 15
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '70%',
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            padding: 20,
+                            font: {
+                                size: 12
+                            },
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Payment Modal
+        const paymentModal = document.getElementById('paymentModal');
+        const enrollButtons = document.querySelectorAll('.enroll-btn');
+        const closeModal = document.querySelector('.close-modal');
+        const paymentMethods = document.querySelectorAll('.payment-method');
+        const courseNameInput = document.getElementById('courseName');
+        const coursePriceInput = document.getElementById('coursePrice');
+        const paymentAmount = document.getElementById('paymentAmount');
+        const referenceNumber = document.getElementById('referenceNumber');
+        const cardDetails = document.getElementById('cardDetails');
+        const bankDetails = document.getElementById('bankDetails');
+        const payfastDetails = document.getElementById('payfastDetails');
+        
+        enrollButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const course = button.getAttribute('data-course');
+                const price = button.getAttribute('data-price');
+                
+                // Set course details
+                courseNameInput.value = course;
+                coursePriceInput.value = price;
+                paymentAmount.textContent = price;
+                
+                // Generate reference number
+                const ref = Math.floor(100000 + Math.random() * 900000);
+                referenceNumber.textContent = ref;
+                
+                // Show modal
+                paymentModal.style.display = 'flex';
+            });
+        });
+        
+        closeModal.addEventListener('click', () => {
+            paymentModal.style.display = 'none';
+        });
+        
+        window.addEventListener('click', (e) => {
+            if (e.target === paymentModal) {
+                paymentModal.style.display = 'none';
+            }
+        });
+        
+        paymentMethods.forEach(method => {
+            method.addEventListener('click', () => {
+                // Remove active class from all
+                paymentMethods.forEach(m => m.classList.remove('active'));
+                
+                // Add active class to clicked
+                method.classList.add('active');
+                
+                // Show appropriate details
+                const methodType = method.getAttribute('data-method');
+                
+                cardDetails.style.display = 'none';
+                bankDetails.style.display = 'none';
+                payfastDetails.style.display = 'none';
+                
+                if (methodType === 'card') {
+                    cardDetails.style.display = 'block';
+                } else if (methodType === 'eft') {
+                    bankDetails.style.display = 'block';
+                } else if (methodType === 'payfast') {
+                    payfastDetails.style.display = 'block';
+                }
+            });
+        });
+        
+        // Form submission
+        document.querySelector('.payment-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Simulate payment processing
+            const paymentMethod = document.querySelector('.payment-method.active').getAttribute('data-method');
+            const course = courseNameInput.value;
+            const price = coursePriceInput.value;
+            
+            // Show success message
+            alert(`Payment of R${price} for ${course} successful!\nYou now have access to the course materials.`);
+            
+            // Close modal
+            paymentModal.style.display = 'none';
+        });
+        
+        // AI Agents Status
+        const agentStatuses = document.querySelectorAll('.agent-status');
+        
+        // Simulate AI agents working
+        setInterval(() => {
+            agentStatuses.forEach(status => {
+                // Randomly change status to show activity
+                if (Math.random() > 0.7) {
+                    status.style.backgroundColor = '#ff9800'; // yellow
+                } else {
+                    status.style.backgroundColor = '#4caf50'; // green
+                }
+            });
+        }, 2000);
+        
+        // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -864,54 +1429,16 @@
             });
         });
         
-        // Animation on scroll
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.1
-        };
-        
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animated');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-        
-        document.querySelectorAll('.feature-card, .course-card, .testimonial-card').forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
-            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            
-            observer.observe(card);
-            
-            card.classList.add('animated');
-        });
-        
-        // Handle the animation when element comes into view
-        document.addEventListener('DOMContentLoaded', function() {
-            const animatedElements = document.querySelectorAll('.feature-card, .course-card, .testimonial-card');
-            
-            animatedElements.forEach(el => {
-                if (el.getBoundingClientRect().top < window.innerHeight - 100) {
-                    el.style.opacity = '1';
-                    el.style.transform = 'translateY(0)';
-                }
-            });
-        });
-        
+        // Header scroll effect
         window.addEventListener('scroll', function() {
-            const animatedElements = document.querySelectorAll('.feature-card:not(.animated), .course-card:not(.animated), .testimonial-card:not(.animated)');
-            
-            animatedElements.forEach(el => {
-                if (el.getBoundingClientRect().top < window.innerHeight - 100) {
-                    el.style.opacity = '1';
-                    el.style.transform = 'translateY(0)';
-                    el.classList.add('animated');
-                }
-            });
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.boxShadow = '0 4px 20px rgba(0,0,0,0.1)';
+                header.style.background = 'rgba(255,255,255,0.95)';
+            } else {
+                header.style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)';
+                header.style.background = 'white';
+            }
         });
     </script>
 </body>
