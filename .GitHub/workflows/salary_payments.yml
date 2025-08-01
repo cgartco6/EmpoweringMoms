@@ -1,0 +1,26 @@
+name: Salary Payment
+
+on:
+  schedule:
+    - cron: '0 8 * * 5'  # Run every Friday at 8am
+  workflow_dispatch:
+
+jobs:
+  salary:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        
+    - name: Install dependencies
+      run: pip install -r scripts/requirements.txt
+      
+    - name: Pay owner
+      env:
+        BANK_API_KEY: ${{ secrets.BANK_API_KEY }}
+      run: python scripts/ai_agents/salary_calculator.py
