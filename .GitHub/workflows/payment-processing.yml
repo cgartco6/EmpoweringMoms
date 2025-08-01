@@ -5,23 +5,23 @@ on:
     types: [payment_received]
 
 jobs:
-  process-payment:
+  payment:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repo
+    - name: Checkout code
       uses: actions/checkout@v3
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        
+    - name: Install dependencies
+      run: pip install -r scripts/requirements.txt
       
     - name: Process payment
       env:
         PAYFAST_MERCHANT_ID: ${{ secrets.PAYFAST_MERCHANT_ID }}
         PAYFAST_MERCHANT_KEY: ${{ secrets.PAYFAST_MERCHANT_KEY }}
-      run: |
-        pip install requests
-        python payment-processor.py "${{ github.event.client_payload.transaction_id }}" \
-          "${{ github.event.client_payload.amount }}" \
-          "${{ github.event.client_payload.course_id }}" \
-          "${{ github.event.client_payload.user_data }}"
-          
-    - name: Send course access
-      run: |
-        python -c "from utils import send_email; send_email('${{ github.event.client_payload.user_data.email }}', 'Course Access', 'Download link: https://yourdomain.com/download/${{ github.event.client_payload.transaction_id }}')"
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      run: python scripts/ai_agents/payment_processor.py
