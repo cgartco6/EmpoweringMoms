@@ -1,60 +1,46 @@
 import os
-import logging
-import smtplib
-from email.mime.text import MIMEText
-from utils import get_config, generate_ai_response, get_unanswered_emails, mark_email_as_answered
+import random
+import requests
+from flask import Flask, request, jsonify
+from utils import get_config, generate_ai_response
 
-# Configure logging
-logging.basicConfig(filename='support.log', level=logging.INFO, 
-                    format='%(asctime)s - %(levelname)s - %(message)s')
+app = Flask(__name__)
 
-CONFIG = get_config()
+SUPPORT_CONTEXT = """
+You are Sarah, a customer support agent for Empowering Moms. 
+You're speaking with South African mothers who want financial freedom.
+Be empathetic, helpful, and solution-oriented. Use simple language.
+"""
 
-def handle_customer_inquiries():
-    """Process and respond to customer inquiries"""
-    logging.info("Checking for new customer inquiries")
-    emails = get_unanswered_emails()
+@app.route('/support', methods=['POST'])
+def handle_support():
+    data = request.json
+    user_message = data['message']
+    user_info = data.get('user', {})
     
-    if not emails:
-        logging.info("No new customer inquiries")
-        return
+    # Generate human-like response
+    prompt = f"{SUPPORT_CONTEXT}\n\nUser: {user_message}\n\nSarah:"
+    response = generate_ai_response(prompt, max_tokens=200)
     
-    for email in emails:
-        try:
-            response = generate_ai_response(
-                email['body'],
-                context="You are a customer support agent for Empowering Moms, a platform offering online courses for South African mothers. Respond helpfully and professionally."
-            )
-            
-            send_email_response(email['from'], response)
-            mark_email_as_answered(email['id'])
-            logging.info(f"Responded to inquiry from {email['from']}")
-        except Exception as e:
-            logging.error(f"Error processing email {email['id']}: {str(e)}")
-
-def send_email_response(to_address, content):
-    """Send email response to customer"""
-    msg = MIMEText(content)
-    msg['Subject'] = 'Re: Your Inquiry - Empowering Moms'
-    msg['From'] = CONFIG['email']['support_address']
-    msg['To'] = to_address
+    # Handle specific cases
+    if "refund" in user_message.lower():
+        response = handle_refund_request(user_info)
+    elif "payment" in user_message.lower():
+        response = handle_payment_issue(user_info)
     
-    with smtplib.SMTP(CONFIG['email']['smtp_server'], CONFIG['email']['smtp_port']) as server:
-        server.starttls()
-        server.login(CONFIG['email']['username'], CONFIG['email']['password'])
-        server.send_message(msg)
+    return jsonify({"response": response, "agent": "Sarah"})
 
-def handle_refunds():
-    """Automatically process refund requests"""
-    logging.info("Processing refund requests")
-    # Integration with payment system to handle refunds
-    # Would include validation and processing logic
+def handle_refund_request(user):
+    """Process refund requests"""
+    # Check user's purchase history
+    # Generate refund policy explanation
+    prompt = f"{SUPPORT_CONTEXT} Explain our refund policy to a user who requested a refund"
+    return generate_ai_response(prompt)
 
-def run_support_chatbot():
-    """Run AI-powered chatbot for real-time support"""
-    logging.info("Starting support chatbot")
-    # Implementation would integrate with website chat widget
+def handle_payment_issue(user):
+    """Resolve payment issues"""
+    prompt = f"{SUPPORT_CONTEXT} Help a user resolve a payment issue"
+    return generate_ai_response(prompt)
 
-if __name__ == "__main__":
-    handle_customer_inquiries()
-    handle_refunds()
+if __name__ == '__main__':
+    app.run(port=5000)
