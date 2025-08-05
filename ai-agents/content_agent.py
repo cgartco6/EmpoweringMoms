@@ -1,85 +1,42 @@
 import os
-import logging
-import random
-from datetime import datetime
-from utils import get_config, generate_ai_content, save_to_database, upload_to_cdn
+import json
+import datetime
+from utils import get_config, generate_ai_content, save_to_database
 
-# Configure logging
-logging.basicConfig(filename='content.log', level=logging.INFO, 
-                    format='%(asctime)s - %(levelname)s - %(message)s')
-
-CONFIG = get_config()
-
-def generate_daily_content():
-    """Generate daily content for the website"""
-    logging.info("Generating daily content")
+def generate_new_course():
+    """Generate a new course every two weeks"""
+    config = get_config()
+    existing_courses = config['courses']
     
-    # Generate blog post
-    blog_topic = random.choice([
-        "Financial tips for South African moms",
-        "Balancing work and family life",
-        "Success stories from our students"
-    ])
-    blog_content = generate_ai_content(
-        f"Write a 1000-word blog post about {blog_topic}",
-        max_tokens=2000
-    )
-    save_blog_post(blog_topic, blog_content)
+    # Analyze popular topics
+    prompt = "Based on current trends, suggest a new online course topic for South African moms wanting financial freedom"
+    topic = generate_ai_content(prompt, max_tokens=100)
     
-    # Generate social media posts
-    for _ in range(3):
-        generate_social_media_post()
+    # Generate course content
+    prompt = f"Create comprehensive course content for: {topic}. Include modules, lessons, and learning objectives"
+    content = generate_ai_content(prompt, max_tokens=2000)
     
-    # Generate newsletter content
-    generate_newsletter()
+    # Set pricing based on complexity
+    word_count = len(content.split())
+    price = min(2000, max(200, int(word_count * 0.05)))
     
-    logging.info("Daily content generation complete")
-
-def save_blog_post(title, content):
-    """Save blog post to database and publish"""
-    logging.info(f"Saving blog post: {title}")
-    post_data = {
-        "title": title,
-        "content": content,
-        "author": "AI Content Generator",
-        "publish_date": datetime.now(),
-        "category": "Financial Freedom"
+    # Create course structure
+    course = {
+        "id": f"course-{datetime.datetime.now().strftime('%Y%m%d')}",
+        "title": topic,
+        "description": content[:500] + "...",
+        "price": price,
+        "modules": json.loads(generate_ai_content(f"Create 5 module titles for course: {topic}")),
+        "created_at": datetime.datetime.now().isoformat()
     }
-    save_to_database("blog_posts", post_data)
-
-def generate_social_media_post():
-    """Generate content for social media"""
-    topic = random.choice([
-        "Motivational quote for moms",
-        "Course feature highlight",
-        "Student success story"
-    ])
-    text = generate_ai_content(f"Create a social media post about: {topic}", max_tokens=280)
-    image_prompt = f"Professional image showing: {text[:100]}"
-    image_url = generate_ai_content(image_prompt, content_type="image")
     
-    # Save to content calendar
-    save_to_database("social_content", {
-        "text": text,
-        "image_url": image_url,
-        "platforms": ["facebook", "instagram"]
-    })
-
-def generate_newsletter():
-    """Generate weekly newsletter content"""
-    logging.info("Generating newsletter content")
-    content = generate_ai_content(
-        "Create a weekly newsletter for Empowering Moms with updates, tips, and course information",
-        max_tokens=1500
-    )
-    # Implementation would send to email list
-
-def update_course_content(course_id):
-    """Update and improve existing course content"""
-    logging.info(f"Updating content for course {course_id}")
-    # Retrieve existing content
-    # Generate improved version
-    # Update in database
+    # Save to database and config
+    save_to_database("courses", course)
+    existing_courses[course['id']] = course
+    update_config({"courses": existing_courses})
+    
+    print(f"Created new course: {topic} (R{price})")
+    return course
 
 if __name__ == "__main__":
-    generate_daily_content()
+    generate_new_course()
