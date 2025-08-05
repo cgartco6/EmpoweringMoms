@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Dashboard head content -->
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Revenue Overview -->
+        <div class="chart-container">
+            <h2><i class="fas fa-chart-line"></i> Revenue Overview</h2>
+            <canvas id="revenueChart"></canvas>
+        </div>
+        
+        <!-- Sales by Province -->
+        <div class="chart-container">
+            <h2><i class="fas fa-map-marker-alt"></i> Sales by Province</h2>
+            <canvas id="provinceChart"></canvas>
+        </div>
+        
+        <!-- Course Performance -->
+        <div class="chart-container">
+            <h2><i class="fas fa-book"></i> Course Performance</h2>
+            <canvas id="courseChart"></canvas>
+        </div>
+        
+        <!-- Real-time Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <h3>Total Revenue</h3>
+                <div class="metric-value" id="totalRevenue">R0</div>
+            </div>
+            <div class="metric-card">
+                <h3>Active Students</h3>
+                <div class="metric-value" id="activeStudents">0</div>
+            </div>
+            <div class="metric-card">
+                <h3>Conversion Rate</h3>
+                <div class="metric-value" id="conversionRate">0%</div>
+            </div>
+            <div class="metric-card">
+                <h3>Refund Rate</h3>
+                <div class="metric-value" id="refundRate">0%</div>
+            </div>
+        </div>
+        
+        <!-- Recent Transactions -->
+        <div class="table-container">
+            <h2><i class="fas fa-receipt"></i> Recent Transactions</h2>
+            <table id="transactionsTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Customer</th>
+                        <th>Course</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Filled by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- AI Agent Status -->
+        <div class="agents-section">
+            <h2><i class="fas fa-robot"></i> AI Agents Status</h2>
+            <div class="agents-grid">
+                <!-- Agent status cards -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Fetch and display dashboard data
+        async function loadDashboardData() {
+            const response = await fetch('/api/dashboard');
+            const data = await response.json();
+            
+            // Update metrics
+            document.getElementById('totalRevenue').textContent = `R${data.total_revenue.toLocaleString()}`;
+            document.getElementById('activeStudents').textContent = data.active_students.toLocaleString();
+            document.getElementById('conversionRate').textContent = `${(data.conversion_rate * 100).toFixed(1)}%`;
+            document.getElementById('refundRate').textContent = `${(data.refund_rate * 100).toFixed(1)}%`;
+            
+            // Render charts
+            renderRevenueChart(data.revenue_data);
+            renderProvinceChart(data.province_data);
+            renderCourseChart(data.course_data);
+            
+            // Populate transactions table
+            populateTransactions(data.recent_transactions);
+            
+            // Update AI agents status
+            updateAgentsStatus(data.ai_status);
+        }
+        
+        function renderRevenueChart(data) {
+            // Chart.js implementation for revenue chart
+        }
+        
+        function renderProvinceChart(data) {
+            // Chart.js implementation for province sales
+        }
+        
+        function renderCourseChart(data) {
+            // Chart.js implementation for course performance
+        }
+        
+        function populateTransactions(transactions) {
+            const tbody = document.querySelector('#transactionsTable tbody');
+            tbody.innerHTML = '';
+            
+            transactions.forEach(transaction => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${transaction.id}</td>
+                    <td>${transaction.customer}</td>
+                    <td>${transaction.course}</td>
+                    <td>R${transaction.amount}</td>
+                    <td>${new Date(transaction.date).toLocaleDateString()}</td>
+                    <td><span class="status ${transaction.status}">${transaction.status}</span></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        function updateAgentsStatus(agents) {
+            const agentsGrid = document.querySelector('.agents-grid');
+            agentsGrid.innerHTML = '';
+            
+            agents.forEach(agent => {
+                const agentCard = document.createElement('div');
+                agentCard.className = 'agent-card';
+                agentCard.innerHTML = `
+                    <h4>
+                        <i class="${agent.icon}"></i> ${agent.name}
+                        <span class="agent-status" style="background: ${agent.status_color}"></span>
+                    </h4>
+                    <p>${agent.description}</p>
+                    <div class="agent-metrics">
+                        <span>Uptime: ${agent.uptime}%</span>
+                        <span>Tasks: ${agent.tasks_completed}</span>
+                    </div>
+                `;
+                agentsGrid.appendChild(agentCard);
+            });
+        }
+        
+        // Load data on page load
+        document.addEventListener('DOMContentLoaded', loadDashboardData);
+        
+        // Refresh data every 5 minutes
+        setInterval(loadDashboardData, 300000);
+    </script>
+</body>
+</html>
