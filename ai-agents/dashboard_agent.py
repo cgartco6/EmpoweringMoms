@@ -1,128 +1,95 @@
-import os
-import logging
+import sqlite3
 import json
 from datetime import datetime, timedelta
-from utils import get_config, query_database, send_email_with_attachment
-
-# Configure logging
-logging.basicConfig(filename='dashboard.log', level=logging.INFO, 
-                    format='%(asctime)s - %(levelname)s - %(message)s')
-
-CONFIG = get_config()
 
 def generate_dashboard_data():
-    """Collect and format data for the owner dashboard"""
-    logging.info("Generating dashboard data")
+    """Generate data for the owner dashboard"""
+    conn = sqlite3.connect('data/transactions.db')
+    cursor = conn.cursor()
     
-    # Calculate date ranges
+    # Get date ranges
     end_date = datetime.now()
     start_date = end_date - timedelta(days=30)
     
-    # Get revenue data
-    revenue_data = get_revenue_data(start_date, end_date)
+    # Revenue data
+    cursor.execute("""
+        SELECT DATE(created_at) AS date, SUM(amount) 
+        FROM transactions 
+        WHERE status = 'completed' AND created_at BETWEEN ? AND ?
+        GROUP BY DATE(created_at)
+    """, (start_date, end_date))
+    revenue_data = cursor.fetchall()
     
-    # Get enrollment data
-    enrollment_data = get_enrollment_data(start_date, end_date)
+    # Sales by province
+    cursor.execute("""
+        SELECT province, SUM(amount), COUNT(*) 
+        FROM transactions 
+        WHERE status = 'completed'
+        GROUP BY province
+    """)
+    province_data = cursor.fetchall()
     
-    # Get marketing performance
-    marketing_data = get_marketing_performance(start_date, end_date)
+    # Course performance
+    cursor.execute("""
+        SELECT courses.title, SUM(transactions.amount), COUNT(*)
+        FROM transactions
+        JOIN courses ON transactions.course_id = courses.id
+        WHERE transactions.status = 'completed'
+        GROUP BY transactions.course_id
+    """)
+    course_data = cursor.fetchall()
     
-    # Compile dashboard data
-    dashboard = {
-        "revenue": revenue_data,
-        "enrollments": enrollment_data,
-        "marketing": marketing_data,
-        "timestamp": datetime.now().isoformat()
-    }
+    # Refund rate
+    cursor.execute("SELECT COUNT(*) FROM transactions WHERE status = 'refunded'")
+    refunded = cursor.fetchone()[0]
+    cursor.execute("SELECT COUNT(*) FROM transactions")
+    total = cursor.fetchone()[0]
+    refund_rate = refunded / total if total > 0 else 0
     
-    # Save to database
-    save_to_database("dashboard_snapshots", dashboard)
+    # Recent transactions
+    cursor.execute("""
+        SELECT id, user_name, course_id, amount, created_at, status
+        FROM transactions
+        ORDER BY created_at DESC
+        LIMIT 10
+    """)
+    recent_transactions = cursor.fetchall()
     
-    logging.info("Dashboard data generated")
-    return dashboard
-
-def get_revenue_data(start_date, end_date):
-    """Get revenue data by course, province, and date"""
-    # Query database for revenue metrics
+    # AI agents status (simulated)
+    ai_status = [
+        {"name": "Marketing Agent", "status": "active", "status_color": "#4CAF50", 
+         "icon": "fas fa-bullhorn", "description": "Promotes courses on social media",
+         "uptime": 99.8, "tasks_completed": 124},
+        {"name": "Support Agent", "status": "active", "status_color": "#4CAF50",
+         "icon": "fas fa-headset", "description": "Handles customer inquiries 24/7",
+         "uptime": 100, "tasks_completed": 87},
+        {"name": "Content Agent", "status": "active", "status_color": "#4CAF50",
+         "icon": "fas fa-file-alt", "description": "Creates new course content",
+         "uptime": 98.5, "tasks_completed": 15},
+        {"name": "Payment Agent", "status": "active", "status_color": "#4CAF50",
+         "icon": "fas fa-credit-card", "description": "Processes transactions securely",
+         "uptime": 99.9, "tasks_completed": 186}
+    ]
+    
+    conn.close()
+    
     return {
-        "total": 42000,
-        "by_course": {
-            "academy_six": 18000,
-            "facebook_blueprint": 15000,
-            "little_learners": 9000
-        },
-        "by_province": {
-            "Gauteng": 15000,
-            "Western Cape": 12000,
-            "KwaZulu-Natal": 8000,
-            "Eastern Cape": 4000,
-            "Free State": 3000
-        },
-        "by_date": {
-            "2025-07-01": 1200,
-            "2025-07-02": 1500,
-            # ... more dates
-        }
+        "total_revenue": sum([r[1] for r in revenue_data]),
+        "active_students": get_active_students(),
+        "conversion_rate": calculate_conversion_rate(),
+        "refund_rate": refund_rate,
+        "revenue_data": revenue_data,
+        "province_data": province_data,
+        "course_data": course_data,
+        "recent_transactions": recent_transactions,
+        "ai_status": ai_status
     }
 
-def get_enrollment_data(start_date, end_date):
-    """Get course enrollment metrics"""
-    return {
-        "total": 142,
-        "by_course": {
-            "academy_six": 14,
-            "facebook_blueprint": 85,
-            "little_learners": 43
-        },
-        "by_source": {
-            "facebook": 65,
-            "instagram": 42,
-            "tiktok": 25,
-            "direct": 10
-        }
-    }
-
-def get_marketing_performance(start_date, end_date):
-    """Get marketing campaign performance"""
-    return {
-        "roi": {
-            "facebook": 4.2,
-            "instagram": 3.8,
-            "tiktok": 5.1
-        },
-        "conversion_rates": {
-            "facebook": 2.4,
-            "instagram": 1.8,
-            "tiktok": 3.2
-        },
-        "cost_per_acquisition": {
-            "facebook": 120,
-            "instagram": 150,
-            "tiktok": 95
-        }
-    }
-
-def send_daily_report():
-    """Send daily report to business owner"""
-    logging.info("Sending daily report")
+def save_dashboard_data():
+    """Save dashboard data to JSON file"""
     data = generate_dashboard_data()
-    
-    # Generate PDF report
-    pdf_path = generate_pdf_report(data)
-    
-    # Send email
-    send_email_with_attachment(
-        CONFIG['owner_email'],
-        "Daily Business Report - Empowering Moms",
-        "Attached is your daily business report",
-        pdf_path
-    )
-    logging.info("Daily report sent")
-
-def generate_pdf_report(data):
-    """Generate PDF version of dashboard report"""
-    # Implementation would use a PDF generation library
-    return "/path/to/report.pdf"
+    with open('frontend/data/dashboard.json', 'w') as f:
+        json.dump(data, f)
 
 if __name__ == "__main__":
-    send_daily_report()
+    save_dashboard_data()
