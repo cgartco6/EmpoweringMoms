@@ -2,45 +2,48 @@ name: AI Agents Automation
 
 on:
   schedule:
-    - cron: '0 8 * * *'  # Run daily at 8am SAST
+    - cron: '0 */4 * * *'  # Run every 4 hours
   workflow_dispatch:
 
 jobs:
-  social-media:
+  marketing:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v3
-      
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-        
-    - name: Run social media bot
-      env:
-        FACEBOOK_TOKEN: ${{ secrets.FACEBOOK_TOKEN }}
-        INSTAGRAM_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
-        TIKTOK_TOKEN: ${{ secrets.TIKTOK_TOKEN }}
-        DEEPAI_API_KEY: ${{ secrets.DEEPAI_API_KEY }}
-      run: |
-        pip install requests
-        python social-media-bot.py
-        
-  weekly-salary:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: pip install -r ai-agents/requirements.txt
+      - name: Run Marketing Agent
+        env:
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
+          FACEBOOK_TOKEN: ${{ secrets.FACEBOOK_TOKEN }}
+          INSTAGRAM_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
+          TIKTOK_TOKEN: ${{ secrets.TIKTOK_TOKEN }}
+          WHATSAPP_TOKEN: ${{ secrets.WHATSAPP_TOKEN }}
+        run: python ai-agents/marketing_agent.py
+
+  content:
     runs-on: ubuntu-latest
-    if: github.event_name == 'schedule' && cron == '0 8 * * 5'  # Fridays at 8am
+    if: github.event_name == 'schedule' && github.schedule == '0 0 * * 0'  # Every Sunday
     steps:
-    - name: Calculate salary
-      run: |
-        # Connect to database and calculate salary
-        SALARY=$(python -c "from payment_processor import generate_dashboard_data; print(generate_dashboard_data()['salary'])")
-        echo "salary=$SALARY" >> $GITHUB_ENV
-        
-    - name: Initiate bank transfer
-      env:
-        BANK_API_KEY: ${{ secrets.BANK_API_KEY }}
-      run: |
-        curl -X POST https://bankapi.example.com/transfer \
-          -H "Authorization: Bearer $BANK_API_KEY" \
-          -d '{"amount": "${{ env.salary }}", "account": "OWNER_ACC_NUM"}'
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: pip install -r ai-agents/requirements.txt
+      - name: Generate New Course
+        env:
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
+        run: python ai-agents/content_agent.py
+      - name: Commit Changes
+        run: |
+          git config --global user.email "ai-agent@empoweringmoms.com"
+          git config --global user.name "AI Content Agent"
+          git add config.json
+          git commit -m "AI: Generated new course content"
+          git push
